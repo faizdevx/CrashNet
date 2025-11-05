@@ -280,9 +280,7 @@ python simulator/full_simulator.py
 http://localhost:3000
 ```
 
----
 
-Would you like a second version that adds:
-- Shields.io badges (build, docker pulls, license, tech stack)  
-- Preview screenshots for the dashboard  
-- A dark "Government Dashboard" hero banner on top?
+# UI INTERFACE
+
+[final_1.png] | [final_2.png] | [final_3.png]
