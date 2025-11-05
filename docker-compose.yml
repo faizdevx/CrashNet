@@ -35,3 +35,25 @@ services:
       - "8002:8002"
     depends_on:
       - crashnet-api
+
+  trainer:
+    build:
+      context: ./crashnet-ml
+      dockerfile: Dockerfile
+    image: faizdevx/crashnet-ml-trainer:latest
+    command: ["python","trainer/online_trainer.py"]
+    depends_on:
+      - crashnet-ml
+    networks:
+      - default
+
+  simulator:
+    build:
+      context: ./simulator
+      dockerfile: Dockerfile  # see below
+    image: crashnet-simulator:latest
+    command: ["python","sensor_sim.py"]
+    depends_on:
+      - crashnet-api
+    networks:
+      - default

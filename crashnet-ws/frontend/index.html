@@ -3,13 +3,35 @@
   <body>
     <h2>CrashNet WS Client</h2>
     <div id="log"></div>
-    <script>
-      const log = (t) => document.getElementById('log').innerHTML += '<pre>'+t+'</pre>';
-      const ws = new WebSocket("ws://localhost:8002/ws");
-      ws.onopen = () => log("WS open");
-      ws.onmessage = (e) => log("MSG: " + e.data);
-      ws.onclose = () => log("WS closed");
-      ws.onerror = (e) => log("error");
-    </script>
+    <!-- in frontend/index.html -->
+<div id="alerts"></div>
+<div id="summary"></div>
+<script>
+  const alertsEl = document.getElementById('alerts');
+  const summaryEl = document.getElementById('summary');
+
+  const ws = new WebSocket("ws://localhost:8002/ws");
+  ws.onmessage = (e) => {
+    let payload = e.data;
+    try { payload = JSON.parse(e.data); } catch {}
+    const el = document.createElement('pre');
+    el.textContent = JSON.stringify(payload, null, 2);
+    alertsEl.prepend(el);
+  }
+
+  // poll summary every 2s
+  async function poll() {
+    try {
+      const r = await fetch("http://localhost:8000/summary");
+      const j = await r.json();
+      summaryEl.innerText = "Summary: " + JSON.stringify(j);
+    } catch(e){
+      summaryEl.innerText = "Summary error";
+    }
+  }
+  setInterval(poll, 2000);
+  poll();
+</script>
+
   </body>
 </html>
