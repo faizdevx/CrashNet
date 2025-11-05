@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <body>
+    <h2>CrashNet WS Client</h2>
+    <div id="log"></div>
+    <script>
+      const log = (t) => document.getElementById('log').innerHTML += '<pre>'+t+'</pre>';
+      const ws = new WebSocket("ws://localhost:8002/ws");
+      ws.onopen = () => log("WS open");
+      ws.onmessage = (e) => log("MSG: " + e.data);
+      ws.onclose = () => log("WS closed");
+      ws.onerror = (e) => log("error");
+    </script>
+  </body>
+</html>

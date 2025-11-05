@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  crashnet-ml:
+    build:
+      context: ./crashnet-ml
+    container_name: crashnet-ml
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./crashnet-ml/models:/app/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  crashnet-api:
+    build:
+      context: ./crashnet-api
+    container_name: crashnet-api
+    ports:
+      - "8000:8000"
+    environment:
+      - ML_URL=http://crashnet-ml:8001
+      - WS_URL=http://crashnet-ws:8002
+    depends_on:
+      crashnet-ml:
+        condition: service_healthy
+
+  crashnet-ws:
+    build:
+      context: ./crashnet-ws
+    container_name: crashnet-ws
+    ports:
+      - "8002:8002"
+    depends_on:
+      - crashnet-api
