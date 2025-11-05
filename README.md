@@ -283,4 +283,4 @@ http://localhost:3000
 
 # UI INTERFACE
 
-[final_1.png] | [final_2.png] | [final_3.png]
+!(final_1.png) | !(final_2.png) | !(final_3.png)
